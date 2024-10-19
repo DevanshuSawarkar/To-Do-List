@@ -22,18 +22,50 @@ let todoList = [
 
 
 
+function onStatusChange(checkboxId, titleId) {
+
+    let checkBoxEl = document.getElementById(checkboxId);
+    let titleEl = document.getElementById(titleId);
+
+    if (checkBoxEl.checked == true) {
+
+        titleEl.classList.add("checked");
+
+    }
+    else {
+
+        titleEl.classList.remove("checked");
+
+    }
+}
+
+
+
+function onDeleteTodo(todoId){
+    let myTodo = document.getElementById(todoId);
+
+    todoRootEl.removeChild(myTodo);
+}
+
+
+
 function createAndAppendTodo(todo) {
 
     let checkboxId = "checkbox" + todo.id;
+    let titleId = "title" + todo.id;
+    let todoId = "todo" + todo.id;
 
     let listCont = document.createElement("li");
     listCont.classList.add("todo-list-cont");
+    listCont.id = todoId;
     todoRootEl.appendChild(listCont);
-
 
     let checkBoxEl = document.createElement("input");
     checkBoxEl.type = "checkbox";
     checkBoxEl.id = checkboxId;
+    checkBoxEl.onclick = function() {
+        onStatusChange(checkboxId, titleId);
+    }
     listCont.appendChild(checkBoxEl);
 
     console.log(checkBoxEl);
@@ -45,13 +77,15 @@ function createAndAppendTodo(todo) {
 
     let titleEl = document.createElement("h4");
     titleEl.textContent = todo.title;
+    titleEl.id = titleId;
     labelEl.appendChild(titleEl);
 
     let deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
+    deleteBtn.onclick = function() {
+        onDeleteTodo(todoId);
+    }
     labelEl.appendChild(deleteBtn);
-
-    // <i class="fa-solid fa-trash"></i>
 
     let trashIconEl = document.createElement("i");
     deleteBtn.classList.add("fa-solid", "fa-trash");

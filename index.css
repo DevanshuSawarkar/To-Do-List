@@ -54,3 +54,7 @@ body {
 
     outline: none;
 }
+
+.checked {
+    text-decoration: line-through;
+}
