@@ -45,6 +45,12 @@ function onDeleteTodo(todoId){
     let myTodo = document.getElementById(todoId);
 
     todoRootEl.removeChild(myTodo);
+
+    let newId = parseInt(todoId.slice(4));
+
+    let index = todoList.findIndex((each)=> each.id === newId);
+
+    todoList.splice(index,1);
 }
 
 
