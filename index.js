@@ -74,8 +74,6 @@ function createAndAppendTodo(todo) {
     }
     listCont.appendChild(checkBoxEl);
 
-    console.log(checkBoxEl);
-
     let labelEl = document.createElement("label");
     labelEl.classList.add("label-cont");
     labelEl.htmlFor = checkboxId;
@@ -111,8 +109,6 @@ for (each of todoList) {
 
 function onAddTodo() {
 
-    console.log(userInputEl.value);
-
     let newTodo = {
         title: userInputEl.value,
         id: todoList.length + 1
@@ -120,7 +116,5 @@ function onAddTodo() {
 
     createAndAppendTodo(newTodo);
     todoList.push(newTodo);
-
-    console.log(todoList);
 
 }
