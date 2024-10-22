@@ -3,32 +3,13 @@ let userInputEl = document.getElementById("userInput");
 
 
 
-// let todoList = [
-
-//     {
-//         title: "HTML",
-//         id: 1
-//     },
-//     {
-//         title: "CSS",
-//         id: 2
-//     },
-//     {
-//         title: "Bootstrap",
-//         id: 3
-//     }
-
-// ]
-
-
-
-function getTodoFromLocalStorage(){
+function getTodoFromLocalStorage() {
 
     let data = localStorage.getItem("myTodoList");
 
-    if(data === null){
+    if (data === null) {
 
-        return[];
+        return [];
 
     }
     else {
@@ -66,16 +47,16 @@ function onStatusChange(checkboxId, titleId) {
 
 
 
-function onDeleteTodo(todoId){
+function onDeleteTodo(todoId) {
     let myTodo = document.getElementById(todoId);
 
     todoRootEl.removeChild(myTodo);
 
     let newId = parseInt(todoId.slice(4));
 
-    let index = todoList.findIndex((each)=> each.id === newId);
+    let index = todoList.findIndex((each) => each.id === newId);
 
-    todoList.splice(index,1);
+    todoList.splice(index, 1);
 }
 
 
@@ -94,13 +75,15 @@ function createAndAppendTodo(todo) {
     let checkBoxEl = document.createElement("input");
     checkBoxEl.type = "checkbox";
     checkBoxEl.id = checkboxId;
-    if(todo.isChecked === true) {
+    if (todo.isChecked === true) {
 
         checkBoxEl.checked = true;
-        
+
     }
-    checkBoxEl.onclick = function() {
+    checkBoxEl.onclick = function () {
+
         onStatusChange(checkboxId, titleId);
+
     }
     listCont.appendChild(checkBoxEl);
 
@@ -116,8 +99,10 @@ function createAndAppendTodo(todo) {
 
     let deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
-    deleteBtn.onclick = function() {
+    deleteBtn.onclick = function () {
+
         onDeleteTodo(todoId);
+
     }
     labelEl.appendChild(deleteBtn);
 
@@ -158,6 +143,6 @@ function onSaveTodo() {
 
     let stringyFyTodo = JSON.stringify(todoList);
 
-    localStorage.setItem('myTodoList', stringyFyTodo);    
+    localStorage.setItem('myTodoList', stringyFyTodo);
 
 }
