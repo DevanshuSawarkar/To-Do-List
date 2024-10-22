@@ -3,22 +3,47 @@ let userInputEl = document.getElementById("userInput");
 
 
 
-let todoList = [
+// let todoList = [
 
-    {
-        title: "HTML",
-        id: 1
-    },
-    {
-        title: "CSS",
-        id: 2
-    },
-    {
-        title: "Bootstrap",
-        id: 3
+//     {
+//         title: "HTML",
+//         id: 1
+//     },
+//     {
+//         title: "CSS",
+//         id: 2
+//     },
+//     {
+//         title: "Bootstrap",
+//         id: 3
+//     }
+
+// ]
+
+
+
+function getTodoFromLocalStorage(){
+
+    let data = localStorage.getItem("myTodoList");
+
+    if(data === null){
+
+        return[];
+
+    }
+    else {
+
+        let parsedTodo = JSON.parse(data);
+
+        return parsedTodo;
+
     }
 
-]
+}
+
+
+
+let todoList = getTodoFromLocalStorage();
 
 
 
@@ -69,6 +94,11 @@ function createAndAppendTodo(todo) {
     let checkBoxEl = document.createElement("input");
     checkBoxEl.type = "checkbox";
     checkBoxEl.id = checkboxId;
+    if(todo.isChecked === true) {
+
+        checkBoxEl.checked = true;
+        
+    }
     checkBoxEl.onclick = function() {
         onStatusChange(checkboxId, titleId);
     }
@@ -115,6 +145,19 @@ function onAddTodo() {
     }
 
     createAndAppendTodo(newTodo);
+
     todoList.push(newTodo);
+
+    userInputEl.value = "";
+
+}
+
+
+
+function onSaveTodo() {
+
+    let stringyFyTodo = JSON.stringify(todoList);
+
+    localStorage.setItem('myTodoList', stringyFyTodo);    
 
 }
