@@ -1,8 +1,7 @@
 let todoRootEl = document.getElementById("todoRoot");
 let userInputEl = document.getElementById("userInput");
 
-
-
+// Function to get the to-do list from localStorage
 function getTodoFromLocalStorage() {
 
     let data = localStorage.getItem("myTodoList");
@@ -11,8 +10,7 @@ function getTodoFromLocalStorage() {
 
         return [];
 
-    }
-    else {
+    } else {
 
         let parsedTodo = JSON.parse(data);
 
@@ -22,31 +20,30 @@ function getTodoFromLocalStorage() {
 
 }
 
-
-
+// Load the to-do list from localStorage
 let todoList = getTodoFromLocalStorage();
 
-
-
-function onStatusChange(checkboxId, titleId) {
-
+// Function to handle the status change (check/uncheck) of a to-do item
+function onStatusChange(checkboxId, titleId, todoId) {
     let checkBoxEl = document.getElementById(checkboxId);
     let titleEl = document.getElementById(titleId);
 
-    if (checkBoxEl.checked == true) {
+    let todoIndex = todoList.findIndex((each) => each.id === todoId);
 
+    // Update the isChecked status in the todoList array
+    if (checkBoxEl.checked) {
         titleEl.classList.add("checked");
-
-    }
-    else {
-
+        todoList[todoIndex].isChecked = true;
+    } else {
         titleEl.classList.remove("checked");
-
+        todoList[todoIndex].isChecked = false;
     }
+
+    // Save the updated todoList to localStorage
+    onSaveTodo();
 }
 
-
-
+// Function to delete a to-do item
 function onDeleteTodo(todoId) {
     let myTodo = document.getElementById(todoId);
 
@@ -57,10 +54,12 @@ function onDeleteTodo(todoId) {
     let index = todoList.findIndex((each) => each.id === newId);
 
     todoList.splice(index, 1);
+
+    // Save the updated list after deletion
+    onSaveTodo();
 }
 
-
-
+// Function to create and append a to-do item to the list
 function createAndAppendTodo(todo) {
 
     let checkboxId = "checkbox" + todo.id;
@@ -75,14 +74,10 @@ function createAndAppendTodo(todo) {
     let checkBoxEl = document.createElement("input");
     checkBoxEl.type = "checkbox";
     checkBoxEl.id = checkboxId;
-    if (todo.isChecked === true) {
-
-        checkBoxEl.checked = true;
-
-    }
+    checkBoxEl.checked = todo.isChecked; // Preserve the checked status
     checkBoxEl.onclick = function () {
 
-        onStatusChange(checkboxId, titleId);
+        onStatusChange(checkboxId, titleId, todo.id);
 
     }
     listCont.appendChild(checkBoxEl);
@@ -95,6 +90,13 @@ function createAndAppendTodo(todo) {
     let titleEl = document.createElement("h4");
     titleEl.textContent = todo.title;
     titleEl.id = titleId;
+
+    if (todo.isChecked) {
+        
+        titleEl.classList.add("checked"); // Add the strike-through if checked
+
+    }
+
     labelEl.appendChild(titleEl);
 
     let deleteBtn = document.createElement("button");
@@ -112,21 +114,27 @@ function createAndAppendTodo(todo) {
 
 }
 
-
-
+// Render the saved todos when the page loads
 for (each of todoList) {
 
     createAndAppendTodo(each);
 
 }
 
-
-
+// Function to add a new to-do item
 function onAddTodo() {
+    let todoText = userInputEl.value.trim(); // Trim to remove any extra spaces
+
+    if (todoText === "") {
+        // Show an alert if the input is empty
+        alert("To-Do item cannot be empty!");
+        return;
+    }
 
     let newTodo = {
-        title: userInputEl.value,
-        id: todoList.length + 1
+        title: todoText,
+        id: todoList.length + 1,
+        isChecked: false // Set to false by default for new todos
     }
 
     createAndAppendTodo(newTodo);
@@ -135,10 +143,11 @@ function onAddTodo() {
 
     userInputEl.value = "";
 
+    // Save the new todo to localStorage
+    onSaveTodo();
 }
 
-
-
+// Function to save the to-do list to localStorage
 function onSaveTodo() {
 
     let stringyFyTodo = JSON.stringify(todoList);
